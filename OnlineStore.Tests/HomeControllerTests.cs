@@ -22,7 +22,7 @@ namespace OnlineStore.Tests
 			HomeController controller = new HomeController(mock.Object);
 
 			// Act
-			ProductListViewModel result = controller.Index()?.ViewData.Model as ProductListViewModel ?? new();
+			ProductListViewModel result = controller.Index(null)?.ViewData.Model as ProductListViewModel ?? new();
 
 			// Assert
 			Product[] prodArray = result.Products.ToArray();
@@ -49,7 +49,7 @@ namespace OnlineStore.Tests
 			controller.PageSize = 3;
 
 			// Act
-			ProductListViewModel result = controller.Index(2)?.ViewData.Model as ProductListViewModel ?? new();
+			ProductListViewModel result = controller.Index(null, 2)?.ViewData.Model as ProductListViewModel ?? new();
 
 			// Assert
 			Product[] prodArray = result.Products.ToArray();
@@ -75,7 +75,7 @@ namespace OnlineStore.Tests
 			HomeController controller = new HomeController(mock.Object) { PageSize = 3 };
 
 			// Act
-			ProductListViewModel result = controller.Index(2)?.ViewData.Model as ProductListViewModel ?? new();
+			ProductListViewModel result = controller.Index(null, 2)?.ViewData.Model as ProductListViewModel ?? new();
 
 			// Assert
 			PagingInfo pageInfo = result.PagingInfo;
