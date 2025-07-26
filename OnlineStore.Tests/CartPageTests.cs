@@ -24,22 +24,7 @@ namespace OnlineStore.Tests
 			testCart.AddItem(p1, 2);
 			testCart.AddItem(p2, 1);
 
-			Mock<ISession> mockSession = new Mock<ISession>();
-			byte[] data = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(testCart));
-			mockSession.Setup(c => c.TryGetValue(It.IsAny<string>(), out data!));
-
-			Mock<HttpContext> mockContext = new Mock<HttpContext>();
-			mockContext.SetupGet(c => c.Session).Returns(mockSession.Object);
-
-			CartModel cartModel = new CartModel(mockRepo.Object)
-			{
-				PageContext = new PageContext(new ActionContext
-				{
-					HttpContext = mockContext.Object,
-					RouteData = new RouteData(),
-					ActionDescriptor = new PageActionDescriptor()
-				})
-			};
+			CartModel cartModel = new CartModel(mockRepo.Object, testCart);
 			cartModel.OnGet("myUrl");
 
 			Assert.Equal(2, cartModel.Cart?.Lines.Count());
@@ -54,33 +39,7 @@ namespace OnlineStore.Tests
 
 			Cart? testCart = new Cart();
 
-			Mock<ISession> mockSession = new Mock<ISession>();
-			mockSession.Setup(s => s.Set(It.IsAny<string>(), It.IsAny<byte[]>()))
-				.Callback<string, byte[]>((key, val) =>
-				{
-					/*
-					 * Converts the byte[] val into a JSON string, then deserialize it into a Cart object.
-					 *
-					 * SetJson(Cart) => SetString(Cart -> JsonString) => SetByteArray(JsonString -> byte[])
-					 * 
-					 * val -> String -> Cart
-					 */
-					testCart = JsonSerializer.Deserialize<Cart>(Encoding.UTF8.GetString(val));
-				}
-			);
-
-			Mock<HttpContext> mockContext = new Mock<HttpContext>();
-			mockContext.SetupGet(c => c.Session).Returns(mockSession.Object);
-
-			CartModel cartModel = new CartModel(mockRepo.Object)
-			{
-				PageContext = new PageContext(new ActionContext
-				{
-					HttpContext = mockContext.Object,
-					RouteData = new RouteData(),
-					ActionDescriptor = new PageActionDescriptor()
-				})
-			};
+			CartModel cartModel = new CartModel(mockRepo.Object, testCart);
 			cartModel.OnPost(1, "myUrl");
 
 			Assert.Single(testCart.Lines);
