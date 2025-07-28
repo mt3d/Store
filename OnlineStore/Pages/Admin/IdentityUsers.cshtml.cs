@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineStore.Pages.Admin
 {
+	[Authorize]
 	public class IdentityUsersModel : PageModel
 	{
 		private UserManager<IdentityUser> userManager;
