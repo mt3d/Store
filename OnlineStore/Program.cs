@@ -1,15 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using OnlineStore.Models;
 using Microsoft.AspNetCore.Identity;
+using OnlineStore.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllersWithViews();
+
+builder.Services.ConfigureWebApplicationServices(builder.Configuration);
+
 builder.Services.AddDbContext<StoreDbContext>(opts => {
 	opts.UseSqlServer(builder.Configuration["ConnectionStrings:OnlineStoreConnection"]);
 });
 builder.Services.AddScoped<IStoreRepository, EFStoreRepository>();
 builder.Services.AddScoped<IOrderRepository, EFOrderRepository>();
-builder.Services.AddRazorPages();
+
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession();
 builder.Services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
