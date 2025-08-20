@@ -8,5 +8,7 @@
 		public void ConfigureServices(IServiceCollection services, IConfiguration configuration);
 
 		public void ConfigureApp(IApplicationBuilder app);
+
+		public StartupOrder Order { get; }
 	}
 }

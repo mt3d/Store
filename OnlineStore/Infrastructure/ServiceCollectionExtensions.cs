@@ -16,7 +16,8 @@ namespace OnlineStore.Infrastructure
 
 			var instances = startupConfigurationClasses
 								.Select(startup => (IStartupConfiguration)Activator.CreateInstance(startup))
-								.Where(startup => startup != null);
+								.Where(startup => startup != null)
+								.OrderBy(startup => (int)(startup.Order));
 
 			foreach (var instance in instances)
 			{

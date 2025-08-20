@@ -22,5 +22,7 @@
 		{
 			// No need to configure anything
 		}
+
+		public StartupOrder Order => StartupOrder.Mvc;
 	}
 }

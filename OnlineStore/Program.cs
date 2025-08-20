@@ -25,6 +25,8 @@ builder.Services.AddDbContext<AppIdentityDbContext>(opts => {
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 	.AddEntityFrameworkStores<AppIdentityDbContext>();
 
+builder.Services.AddSingleton<RouteProvider>();
+
 var app = builder.Build();
 
 if (app.Environment.IsProduction())
@@ -42,13 +44,8 @@ app.UseRequestLocalization(opts =>
 app.UseStaticFiles();
 app.UseSession();
 
-app.UseAuthentication();
-app.UseAuthorization();
+app.ConfigurePipeline();
 
-app.MapControllerRoute("catpage", "{category}/Page{productPage:int}", new { Controller = "Home", action = "Index" });
-app.MapControllerRoute("page", "Page{productPage:int}", new { Controller = "Home", action = "Index", productPage = 1 });
-app.MapControllerRoute("category", "{category}", new { Controller = "Home", action = "Index", productPage = 1 });
-app.MapControllerRoute("pagination", "Products/Page{productPage}", new { Controller = "Home", action = "Index" });
 app.MapDefaultControllerRoute();
 app.MapRazorPages();
 app.MapBlazorHub();
